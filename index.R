@@ -90,6 +90,13 @@ mod <- lm(TOTCHG ~ .,data=hosp_cost)
 summary(mod)
 
 
+#ALTERNATIVE 
+str(hosp_cost)
+summary(hosp_cost)
+hist(hosp_cost$AGE, col="red", main="Age Distributions")
+hist(hosp_cost$FEMALE, col="blue", main="Transaction Volume")
+plot(hosp_cost$RACE, hosp_cost$TOTCHG, main="Cost Distribution by Race")
+
 
 
 
