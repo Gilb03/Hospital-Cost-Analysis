@@ -2,14 +2,17 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(tidyr)
-setwd("~/zrc/HHS_ProviderRelief_Analysis/data")
+library(randomForest)
+setwd("~/zrc/HHS_CostAnalysis/data")
 
 
 #READ IN DATA
-HHSindata <- read.csv("rows.csv")
 hosp_cost <- read.csv("HospitalCosts.csv")
 
-#DESCRIPTIVE STATS 
+#DESCRIPTIVE STATS
+# str describes the types of variables we are working with in the wisconsin hospital dataset
+#The age range is between 0-17 years old and the gender identifying 1 or 0 refers to isFemale = 1, isNotFemale=0
+#LOS refers to the length of stay. TOTCHG is the hospital discharge costs, and APRDRG stands for all patient refined  diagnosis related groups
 str(hosp_cost)
 head(hosp_cost)
 tail(hosp_cost)
@@ -27,7 +30,7 @@ which.max(table(hosp_cost$AGE))
 age <- aggregate(TOTCHG ~ AGE, data = hosp_cost, sum)
 max(age)
 
-
+#whats the race distribution?
 str(hosp_cost)
 head(hosp_cost$RACE)
 tail(hosp_cost$RACE)
@@ -36,7 +39,7 @@ plot(hosp_cost$RACE)
 summary(as.factor(hosp_cost$RACE))
 max(summary(as.factor(hosp_cost$RACE)))
 
-
+#whats the gender distirbution?
 str(hosp_cost$FEMALE)
 head(hosp_cost$FEMALE)
 summary(hosp_cost$FEMALE)
@@ -92,7 +95,7 @@ summary(mod)
 
 #RANDOM FOREST 
 
-set.seed(1937028)
+set.seed(1900)
 train_ind <- sample(nrow(hosp_cost),round(0.75*nrow(hosp_cost)))
 train     <- hosp_cost[train_ind,]
 test      <- hosp_cost[-train_ind,]
@@ -114,18 +117,3 @@ varImpPlot(rfModel,
            n.var=10,
            main="Most Important Variables")
 
-
-#KNN does not work
-str(hosp_cost)
-hosp_cost$Class <- as.factor(hosp_cost$Class)
-set.seed(1991)
-samp <- sample(1:nrow(hosp_cost), round(0.2*nrow(hosp_cost)))
-cost <- hosp_cost[samp, ]
-index <- createDataPartition(cost$RACE, p = 0.75, list = F)
-train <- cost[index, ]
-test <- cost[-index, ]
-
-library(caret)
-library(class)
-knn1 <- knn(train = train[,-31], test = test[,-31], cl = train$Class, k = 3)
-confusionMatrix(knn1, test$Class, positive = "1")

@@ -2,7 +2,7 @@ library(shiny)
 library(dplyr)
 library(readr)
 library(shinydashboard)
-setwd("~/zrc/HHS_ProviderRelief_Analysis/data")
+setwd("~/zrc/HHS_CostAnalysis/data")
 
 #LOAD DATA 
 hosp_cost <- read.csv("HospitalCosts.csv")
