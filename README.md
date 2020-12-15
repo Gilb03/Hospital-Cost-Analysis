@@ -1,4 +1,4 @@
-# Hospital-Cost-Analysis
+# Hospital Cost Analysis
 Predictive analytics to discover relationships between demographics and hospital costs. 
 
 # About 
